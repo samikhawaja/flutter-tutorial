@@ -9,6 +9,7 @@ void main()
 class RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
+  final _saved = Set<WordPair>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +22,24 @@ class RandomWordsState extends State<RandomWords> {
 
   Widget _buildRow(WordPair wp) 
   {
+    final bool alreadySaved = _saved.contains(wp);
     return ListTile(
       title: Text(
         wp.asPascalCase, style: _biggerFont
-      )
+      ),
+      trailing: Icon(
+        alreadySaved? Icons.favorite:Icons.favorite_border,
+        color: alreadySaved? Colors.red: null
+      ),
+      onTap: () {
+        setState(() {
+          if (alreadySaved) {
+            _saved.remove(wp);
+          } else {
+            _saved.add(wp);
+          }
+        });
+      },
     );
   }
 
